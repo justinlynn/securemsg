@@ -1,0 +1,19 @@
+{
+  "name": "sjcl-axolotl",
+  "version": "0.0.1",
+  "description": "Implements the Axolotl Ratchet",
+  "scripts": {
+    "test": "grunt"
+  },
+  "author": "J Lynn <j@jaesharp.com>",
+  "license": "Public Domain",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-browserify": "^2.1.4",
+    "grunt-contrib-uglify": "^0.5.0",
+    "grunt-contrib-connect": "^0.8.0",
+    "grunt-mocha-phantomjs": "^0.5.0",
+    "mocha": "^1.21.0"
+  }
+}
