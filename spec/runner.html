@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
-    <title>SJCL-Axolotl Tests</title>
+    <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
-    <script src="../../build/browser/sjcl-axolotl.require.js"></script>
+    <script src="../../build/securemsg.require.js"></script>
   </head>
   <body>
     <div id="mocha"></div>
 
     <!-- load and configure mocha -->
-    <script src="../../node_modules/mocha/mocha.js"></script>
+    <script src="../../bower_components/mocha/mocha.js"></script>
+    <script src="../../bower_components/should/should.js"></script>
     <script>
       'use strict';
       mocha.setup('bdd')
@@ -20,7 +21,7 @@
     </script>
 
     <!-- load test suite -->
-    <script src="../../build/browser/sjcl-axolotl.tests.js"></script>
+    <script src="../../build/securemsg.specs.js"></script>
 
     <script>
       if (window.mochaPhantomJS) {

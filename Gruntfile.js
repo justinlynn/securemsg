@@ -8,28 +8,36 @@ module.exports = function(grunt) {
 
     browserify: {
       standalone: {
-        src: [ 'lib/<%= pkg.name %>.js' ],
-        dest: './build/browser/<%= pkg.name %>.standalone.js',
+        src: [ './src/<%= pkg.name %>.coffee' ],
+        dest: './build/<%= pkg.name %>.standalone.js',
         options: {
           bundleOptions: {
-            standalone: '<%= pkg.name %>'
+            standalone: 'securemsg'
           }
         }
       },
       require: {
-        src: [ 'lib/<%= pkg.name %>.js' ],
-        dest: './build/browser/<%= pkg.name %>.require.js',
+        src: [ './src/<%= pkg.name %>.coffee' ],
+        dest: './build/<%= pkg.name %>.require.js',
         options: {
-          alias: [ './lib/<%= pkg.name %>.js:' ]
+          alias: [ './src/<%= pkg.name %>.coffee:' ]
         }
       },
-      tests: {
-        src: [ 'test/browser/suite.js' ],
-        dest: './build/browser/<%= pkg.name %>.tests.js',
+      specs: {
+        src: [ './spec/suites.coffee' ],
+        dest: './build/<%= pkg.name %>.specs.js',
         options: {
-          external: [ './lib/<%= pkg.name %>.js' ],
-          debug: true // embed source maps
+          debug: true, // embed source maps
+          alias: [ './src/<%= pkg.name %>.coffee:securemsg' ]
         }
+      }
+    },
+
+    coffeelint: {
+      src: ['src/**/*.coffee'],
+      spec: ['spec/**/*.coffee'],
+      options: {
+        configFile: '.coffeelintrc'
       }
     },
 
@@ -37,32 +45,34 @@ module.exports = function(grunt) {
       server: {},
     },
 
-    jshint: {
-      files: [
-        '**/*.js',
-        '!node_modules/**/*',
-        '!build/**/*'
-      ],
-      options: {
-        jshintrc: '.jshintrc'
-      }
-    },
-
     'mocha_phantomjs': {
       all: {
         options: {
           urls: [
-            'http://127.0.0.1:8000/test/browser/index.html'
+            'http://127.0.0.1:8000/spec/runner.html'
             ]
         }
+      }
+    },
+
+    simplemocha: {
+      options: {
+        globals: ['should'],
+        timeout: 3000,
+        ignoreLeaks: false,
+        ui: 'bdd',
+        reporter: 'spec'
+      },
+      all: {
+        src: ['node_modules/should/should.js','build/<%= pkg.name %>.require.js', 'build/<%= pkg.name %>.specs.js']
       }
     },
 
     uglify: {
       dist: {
         files: {
-          'build/browser/<%= pkg.name %>.standalone.min.js':
-            ['<%= browserify.standalone.dest %>'],
+          'build/<%= pkg.name %>.min.js':
+            ['<%= browserify.standalone.dest %>']
         }
       }
     }
@@ -74,13 +84,17 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-mocha-phantomjs');
+  grunt.loadNpmTasks('grunt-contrib-coffee');
+  grunt.loadNpmTasks('grunt-coffeelint');
+  grunt.loadNpmTasks('grunt-simple-mocha');
 
   grunt.registerTask('default', [
-    'jshint',
+    'coffeelint',
     'browserify',
     'uglify',
+    'simplemocha',
     'connect',
-    'mocha_phantomjs',
+    'mocha_phantomjs' // run in the browser
   ]);
 
 };
